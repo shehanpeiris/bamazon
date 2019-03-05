@@ -26,7 +26,7 @@ function displayInventory() {
         console.log("\nWelcome to the Bamazon Store! \nHere is our product inventory: ");
         // Loop through products table to display every item and relevant info
         for (var i=0; i<res.length; i++){
-            console.log("\nItem ID: " + res[i].item_id + "\nProduct Name: " + res[i].product_name + "\nPrice: " + res[i].price + "\n----------");
+            console.log("\nItem ID: " + res[i].item_id + "\nProduct Name: " + res[i].product_name + "\nPrice: " + res[i].price.toFixed(2) + "\n----------");
         };
         // Run function to initiate user interactivity
         appInit();
