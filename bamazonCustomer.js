@@ -54,12 +54,13 @@ function appInit() {
             connection.query(
                 "SELECT * FROM products WHERE item_id = " + productID, function(err, res) {
                     if (res[0].stock_quantity >= quantity) {
-                        console.log("\n-----------------------\nYour order went through!\nYour total price: $" + (res[0].price*quantity).toFixed(2));
+                        console.log("\n-----------------------\nYour order went through!\nYour total price: $" + (res[0].price*quantity).toFixed(2) + "\nThank you for shopping with Bamazon!");
                         var remaining = res[0].stock_quantity - quantity;
                         // Call function to update inventory after customer's order
                         updateInventory(productID, remaining);
                     } else {
                         console.log("\n-----------------------\nUnfortunately we don't have enough of that product to fulfill your order.\nPlease try a smaller order or feel free to browse the rest of our selection.");
+                        userRedirect();
                     }
                 }
             );
@@ -80,7 +81,25 @@ function updateInventory(id, num) {
             ],
             function(error) {
                 if (error) throw error;
-                console.log("Database updated successfully!");
+                userRedirect();
             }
         );
+};
+
+function userRedirect() {
+    inquirer
+        .prompt([
+            {
+                name: "stayHere",
+                type: "confirm",
+                message: "Is there anything else you'd like to buy?"
+            }
+        ]).then(function(answer){
+            if(answer.stayHere) {
+                displayInventory();
+            } else {
+                console.log("We're sorry to see you go. Have a wonderful day!");
+                connection.end();
+            }
+        });
 };
